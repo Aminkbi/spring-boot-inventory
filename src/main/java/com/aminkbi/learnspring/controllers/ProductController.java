@@ -1,11 +1,9 @@
 package com.aminkbi.learnspring.controllers;
 
 
-import com.aminkbi.learnspring.dtos.category.ProductDTO;
+import com.aminkbi.learnspring.dtos.product.ProductDTO;
 import com.aminkbi.learnspring.exceptions.NotFoundException;
-import com.aminkbi.learnspring.models.Category;
 import com.aminkbi.learnspring.models.Product;
-import com.aminkbi.learnspring.models.Supplier;
 import com.aminkbi.learnspring.models.response.DeleteResponse;
 import com.aminkbi.learnspring.models.response.ResponseModel;
 import com.aminkbi.learnspring.models.response.UpdateResponse;

@@ -1,6 +1,7 @@
 package com.aminkbi.learnspring.services;
 
 
+import com.aminkbi.learnspring.dtos.category.CategoryDTO;
 import com.aminkbi.learnspring.exceptions.NotFoundException;
 import com.aminkbi.learnspring.models.Category;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.aminkbi.learnspring.repositories.CategoryRepository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class CategoryService {
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
 
     @Autowired
@@ -23,7 +21,11 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Category addCategory(Category category){
+    public Category addCategory(CategoryDTO categoryDTO){
+
+        var category = new Category();
+        category.setName(categoryDTO.getName());
+
         return categoryRepository.save(category);
     }
 
@@ -31,10 +33,10 @@ public class CategoryService {
         return categoryRepository.getCategoryById(id);
     }
 
-    public Category updateCategory(Long id, Category updatedCategory) {
+    public Category updateCategory(Long id, CategoryDTO categoryDTO) {
         Category existingCategory = categoryRepository.getCategoryById(id);
         if (existingCategory != null) {
-            existingCategory.setName(updatedCategory.getName());
+            existingCategory.setName(categoryDTO.getName());
             return categoryRepository.save(existingCategory);
 
         } else {

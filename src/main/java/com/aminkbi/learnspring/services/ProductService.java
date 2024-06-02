@@ -1,15 +1,12 @@
 package com.aminkbi.learnspring.services;
 
 
-import com.aminkbi.learnspring.dtos.category.ProductDTO;
+import com.aminkbi.learnspring.dtos.product.ProductDTO;
 import com.aminkbi.learnspring.exceptions.NotFoundException;
 import com.aminkbi.learnspring.models.Category;
 import com.aminkbi.learnspring.models.Product;
 import com.aminkbi.learnspring.models.Supplier;
-import com.aminkbi.learnspring.repositories.CategoryRepository;
 import com.aminkbi.learnspring.repositories.ProductRepository;
-import com.aminkbi.learnspring.repositories.SupplierRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,17 +29,17 @@ public class ProductService {
     }
 
     public Product addProduct(ProductDTO productDTO){
-        Product product = new Product();
+        var product = new Product();
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setPrice(productDTO.getPrice());
         product.setQuantity(productDTO.getQuantity());
 
-        Category category = new Category();
+        var category = new Category();
         category.setId(productDTO.getId());
         product.setCategory(category);
 
-        Supplier supplier = new Supplier();
+        var supplier = new Supplier();
         supplier.setId(productDTO.getId());
         product.setSupplier(supplier);
 

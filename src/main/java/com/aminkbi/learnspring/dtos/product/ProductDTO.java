@@ -1,9 +1,7 @@
-package com.aminkbi.learnspring.dtos.category;
+package com.aminkbi.learnspring.dtos.product;
 
 
 
-import com.aminkbi.learnspring.models.Category;
-import com.aminkbi.learnspring.models.Supplier;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -33,4 +31,4 @@ public class ProductDTO {
     private Long supplierId;
 
 
-    }
+}
