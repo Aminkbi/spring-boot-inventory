@@ -2,6 +2,7 @@ package com.aminkbi.learnspring.models;
 
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -27,10 +28,12 @@ public class OrderItems {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private AppUser appUser;
+    @JsonBackReference
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "order_id")
     private CustomerOrder customerOrder;
 

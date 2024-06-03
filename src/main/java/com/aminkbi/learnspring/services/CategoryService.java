@@ -1,13 +1,15 @@
 package com.aminkbi.learnspring.services;
 
 import com.aminkbi.learnspring.dtos.category.CategoryDTO;
+import com.aminkbi.learnspring.dtos.category.CategoryResponseDTO;
 import com.aminkbi.learnspring.exceptions.NotFoundException;
 import com.aminkbi.learnspring.models.Category;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.aminkbi.learnspring.repositories.CategoryRepository;
+
+import java.util.List;
 
 @Service
 public class CategoryService {
@@ -19,20 +21,24 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Category addCategory(CategoryDTO categoryDTO) {
+    public CategoryResponseDTO addCategory(CategoryDTO categoryDTO) {
         Category category = new Category();
         category.setName(categoryDTO.getName());
-        return categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(category);
+        return mapToDTO(savedCategory);
     }
 
-    public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
+    public CategoryResponseDTO getCategoryById(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
+        return mapToDTO(category);
     }
 
-    public void updateCategory(Long id, CategoryDTO categoryDTO) {
-        Category existingCategory = getCategoryById(id);
-        existingCategory.setName(categoryDTO.getName());
-        categoryRepository.save(existingCategory);
+    public CategoryResponseDTO updateCategory(Long id, CategoryDTO categoryDTO) {
+        Category category = new Category();
+        category.setName(categoryDTO.getName());
+        category.setId(id);
+        return this.mapToDTO(categoryRepository.save(category));
     }
 
     public void deleteCategoryById(Long id) {
@@ -42,7 +48,15 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
-    public Page<Category> getAllCategories(Pageable pageable) {
-        return categoryRepository.findAll(pageable);
+    public List<CategoryResponseDTO> getAllCategories(Pageable pageable) {
+        return categoryRepository.findAll(pageable)
+                .stream().map(this::mapToDTO).toList();
+    }
+
+    private CategoryResponseDTO mapToDTO(Category category) {
+        CategoryResponseDTO dto = new CategoryResponseDTO();
+        dto.setName(category.getName());
+        dto.setId(category.getId());
+        return dto;
     }
 }

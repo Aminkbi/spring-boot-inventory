@@ -1,6 +1,7 @@
 package com.aminkbi.learnspring.services;
 
 import com.aminkbi.learnspring.dtos.category.CategoryDTO;
+import com.aminkbi.learnspring.dtos.category.CategoryResponseDTO;
 import com.aminkbi.learnspring.exceptions.NotFoundException;
 import com.aminkbi.learnspring.models.Category;
 import com.aminkbi.learnspring.repositories.CategoryRepository;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +47,7 @@ class CategoryServiceTest {
 
         when(categoryRepository.save(any(Category.class))).thenReturn(category);
 
-        Category result = categoryService.addCategory(categoryDTO);
+        CategoryResponseDTO result = categoryService.addCategory(categoryDTO);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
@@ -60,7 +62,7 @@ class CategoryServiceTest {
 
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
 
-        Category result = categoryService.getCategoryById(1L);
+        CategoryResponseDTO result = categoryService.getCategoryById(1L);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
@@ -78,6 +80,7 @@ class CategoryServiceTest {
 
     @Test
     void testUpdateCategory() {
+        // Arrange
         Category existingCategory = new Category();
         existingCategory.setId(1L);
         existingCategory.setName("Old Category");
@@ -85,13 +88,22 @@ class CategoryServiceTest {
         CategoryDTO categoryDTO = new CategoryDTO();
         categoryDTO.setName("Updated Category");
 
+        Category updatedCategory = new Category();
+        updatedCategory.setId(1L);
+        updatedCategory.setName("Updated Category");
+
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(existingCategory));
-        when(categoryRepository.save(any(Category.class))).thenReturn(existingCategory);
+        when(categoryRepository.save(any(Category.class))).thenReturn(updatedCategory);
 
-        categoryService.updateCategory(1L, categoryDTO);
+        // Act
+        CategoryResponseDTO result = categoryService.updateCategory(1L, categoryDTO);
 
-        assertEquals("Updated Category", existingCategory.getName());
+        // Assert
+        assertNotNull(result);
+        assertEquals("Updated Category", result.getName());
+        assertEquals(1L, result.getId());
     }
+
 
     @Test
     void testDeleteCategoryById() {
@@ -126,11 +138,11 @@ class CategoryServiceTest {
 
         when(categoryRepository.findAll(pageable)).thenReturn(page);
 
-        Page<Category> result = categoryService.getAllCategories(pageable);
+        List<CategoryResponseDTO> result = categoryService.getAllCategories(pageable);
 
         assertNotNull(result);
-        assertEquals(2, result.getContent().size());
-        assertEquals("Category 1", result.getContent().get(0).getName());
-        assertEquals("Category 2", result.getContent().get(1).getName());
+        assertEquals(2, result.size());
+        assertEquals("Category 1", result.get(0).getName());
+        assertEquals("Category 2", result.get(1).getName());
     }
 }

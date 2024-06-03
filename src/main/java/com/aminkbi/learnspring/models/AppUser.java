@@ -2,6 +2,7 @@ package com.aminkbi.learnspring.models;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -28,4 +29,10 @@ public class AppUser {
     @Column(nullable = false)
     @Size(max = 50)
     private String username;
+
+
+    @Column(nullable = false)
+    @Email
+    private String email;
+
 }

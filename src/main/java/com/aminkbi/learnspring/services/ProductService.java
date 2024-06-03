@@ -77,7 +77,7 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public Page<Product> getAllCategories(Integer page, Integer pageSize){
+    public Page<Product> getAllProducts(Integer page, Integer pageSize){
         return productRepository.findAll(Pageable.ofSize(pageSize).withPage(page));
     }
 }

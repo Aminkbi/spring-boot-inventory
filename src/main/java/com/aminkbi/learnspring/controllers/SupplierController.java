@@ -1,6 +1,8 @@
 package com.aminkbi.learnspring.controllers;
 
 
+import com.aminkbi.learnspring.dtos.supplier.SupplierDTO;
+import com.aminkbi.learnspring.dtos.supplier.SupplierResponseDTO;
 import com.aminkbi.learnspring.exceptions.NotFoundException;
 import com.aminkbi.learnspring.models.Supplier;
 import com.aminkbi.learnspring.models.response.DeleteResponse;
@@ -27,31 +29,24 @@ public class SupplierController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseModel<Supplier>> addSupplier(@Valid @RequestBody Supplier supplier){
-        Supplier toBeAddedSupplier = new Supplier();
-        toBeAddedSupplier.setName(supplier.getName());
+    public ResponseEntity<ResponseModel<SupplierResponseDTO>> addSupplier(@Valid @RequestBody SupplierDTO supplierDTO){
 
-        Supplier addedSupplier = supplierService.addSupplier(toBeAddedSupplier);
-        ResponseModel<Supplier> responseModel = new ResponseModel<>(1, "Supplier Created Successfully",addedSupplier);
+
+        SupplierResponseDTO addedSupplier = supplierService.addSupplier(supplierDTO);
+        var responseModel = new ResponseModel<>(1, "Supplier Created Successfully",addedSupplier);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseModel);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseModel<Supplier>> getSupplier(@PathVariable Long id) throws NotFoundException {
-        Optional<Supplier> supplier = supplierService.getSupplierById(id);
-        if(supplier.isEmpty()){
-            throw new NotFoundException("Supplier not found");
-        }
-        ResponseModel<Supplier> responseModel = new ResponseModel<>(1, "Fetched Supplier Successfully",supplier.get());
+    public ResponseEntity<ResponseModel<SupplierResponseDTO>> getSupplier(@PathVariable Long id) throws NotFoundException {
+        SupplierResponseDTO supplier = supplierService.getSupplierById(id);
+        var responseModel = new ResponseModel<>(1, "Fetched Supplier Successfully",supplier);
         return ResponseEntity.status(HttpStatus.OK).body(responseModel);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateResponse> updateSupplier(@PathVariable Long id,@Valid @RequestBody Supplier supplier) throws NotFoundException {
-        Supplier updatedSupplier = supplierService.updateSupplier(id, supplier);
-        if(updatedSupplier == null){
-            throw new NotFoundException("Supplier not found");
-        }
+    public ResponseEntity<UpdateResponse> updateSupplier(@PathVariable Long id,@Valid @RequestBody SupplierDTO supplier) throws NotFoundException {
+        supplierService.updateSupplier(id, supplier);
         return ResponseEntity.status(HttpStatus.OK).body(new UpdateResponse(1, "Supplier Updated Successfully"));
     }
 
@@ -62,7 +57,7 @@ public class SupplierController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseModel<List<Supplier>>> listCategories(@RequestParam @NotNull Integer page, @RequestParam @NotNull Integer pageSize) {
-        return ResponseEntity.ok(new ResponseModel<>(1,"Categories fetched successfully",supplierService.getAllCategories(page, pageSize).get().toList()));
+    public ResponseEntity<ResponseModel<List<SupplierResponseDTO>>> listCategories(@RequestParam @NotNull Integer page, @RequestParam @NotNull Integer pageSize) {
+        return ResponseEntity.ok(new ResponseModel<>(1,"Categories fetched successfully",supplierService.getAllSuppliers(page, pageSize)));
     }
 }

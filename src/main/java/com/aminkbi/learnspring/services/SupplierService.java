@@ -1,16 +1,17 @@
 package com.aminkbi.learnspring.services;
 
 
+import com.aminkbi.learnspring.dtos.supplier.SupplierDTO;
+import com.aminkbi.learnspring.dtos.supplier.SupplierResponseDTO;
 import com.aminkbi.learnspring.exceptions.NotFoundException;
 import com.aminkbi.learnspring.models.Supplier;
 import com.aminkbi.learnspring.repositories.SupplierRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class SupplierService {
@@ -23,40 +24,52 @@ public class SupplierService {
         this.supplierRepository = supplierRepository;
     }
 
-    public Supplier addSupplier(@Valid Supplier supplier){
-        return supplierRepository.save(supplier);
+    public SupplierResponseDTO addSupplier(SupplierDTO supplierDTO){
+        Supplier supplier = new Supplier();
+        supplier.setName(supplierDTO.getName());
+        supplier.setContactPhone(supplierDTO.getContactPhone());
+        supplier.setContactEmail(supplierDTO.getContactEmail());
+        supplier.setContactName(supplierDTO.getContactName());
+        Supplier savedSupplier = supplierRepository.save(supplier);
+
+        return mapToDTO(savedSupplier);
     }
 
-    public Optional<Supplier> getSupplierById(Long id){
-        return supplierRepository.findById(id);
+    public SupplierResponseDTO getSupplierById(Long id){
+        Supplier supplier = supplierRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Supplier not found with id " + id));
+
+        return this.mapToDTO(supplier);
     }
 
-    public Supplier updateSupplier(Long id, @Valid Supplier updatedSupplier) {
-        Optional<Supplier> existingSupplier = supplierRepository.findById(id);
-        if (existingSupplier.isPresent()) {
-            Supplier supplier = existingSupplier.get();
-            supplier.setName(updatedSupplier.getName());
-            if(updatedSupplier.getContactEmail() != null){
-                supplier.setContactEmail(updatedSupplier.getContactEmail());
-            }
-            if(updatedSupplier.getContactName() != null){
-                supplier.setContactName(updatedSupplier.getContactName());
-            }
-            if(updatedSupplier.getContactPhone() != null){
-                supplier.setContactPhone(updatedSupplier.getContactPhone());
-            }
-            return supplierRepository.save(existingSupplier.get());
+    public SupplierResponseDTO updateSupplier(Long id, @Valid SupplierDTO supplierDTO) {
+        Supplier existingSupplier = supplierRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Supplier not found with id " + id));
 
-        } else {
-            throw new NotFoundException("Supplier not found with id: " + id);
-        }
+        existingSupplier.setName(supplierDTO.getName());
+        existingSupplier.setContactEmail(supplierDTO.getContactEmail());
+        existingSupplier.setContactName(supplierDTO.getContactName());
+        existingSupplier.setContactPhone(supplierDTO.getContactPhone());
+
+        return this.mapToDTO(supplierRepository.save(existingSupplier));
     }
 
     public void deleteSupplierById(Long id){
         supplierRepository.deleteById(id);
     }
 
-    public Page<Supplier> getAllCategories(Integer page, Integer pageSize){
-        return supplierRepository.findAll(Pageable.ofSize(pageSize).withPage(page));
+    public List<SupplierResponseDTO> getAllSuppliers(Integer page, Integer pageSize){
+        return supplierRepository.findAll(Pageable.ofSize(pageSize).withPage(page))
+                .stream().map(this::mapToDTO).toList();
+    }
+
+    private SupplierResponseDTO mapToDTO(Supplier supplier) {
+        SupplierResponseDTO supplierResponseDTO = new SupplierResponseDTO();
+        supplierResponseDTO.setId(supplier.getId());
+        supplierResponseDTO.setName(supplier.getName());
+        supplierResponseDTO.setContactEmail(supplier.getContactEmail());
+        supplierResponseDTO.setContactPhone(supplier.getContactPhone());
+        supplierResponseDTO.setContactName(supplier.getContactName());
+        return supplierResponseDTO;
     }
 }

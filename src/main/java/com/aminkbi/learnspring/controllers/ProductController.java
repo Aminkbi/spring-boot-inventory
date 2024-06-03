@@ -63,7 +63,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseModel<List<Product>>> listCategories(@RequestParam @NotNull Integer page, @RequestParam @NotNull Integer pageSize) {
-        return ResponseEntity.ok(new ResponseModel<>(1,"Categories fetched successfully",productService.getAllCategories(page, pageSize).get().toList()));
+    public ResponseEntity<ResponseModel<List<Product>>> listProducts(@RequestParam @NotNull Integer page, @RequestParam @NotNull Integer pageSize) {
+        return ResponseEntity.ok(new ResponseModel<>(1,"Categories fetched successfully",productService.getAllProducts(page, pageSize).get().toList()));
     }
 }
