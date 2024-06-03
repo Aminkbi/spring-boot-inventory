@@ -2,10 +2,8 @@ package com.aminkbi.learnspring.controllers;
 
 import com.aminkbi.learnspring.dtos.category.CategoryDTO;
 import com.aminkbi.learnspring.dtos.category.CategoryResponseDTO;
-import com.aminkbi.learnspring.models.Category;
 import com.aminkbi.learnspring.models.response.DeleteResponse;
 import com.aminkbi.learnspring.models.response.ResponseModel;
-import com.aminkbi.learnspring.models.response.UpdateResponse;
 import com.aminkbi.learnspring.services.CategoryService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/categories")

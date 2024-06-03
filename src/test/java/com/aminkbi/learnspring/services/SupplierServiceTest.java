@@ -2,7 +2,6 @@ package com.aminkbi.learnspring.services;
 
 import com.aminkbi.learnspring.dtos.supplier.SupplierDTO;
 import com.aminkbi.learnspring.dtos.supplier.SupplierResponseDTO;
-import com.aminkbi.learnspring.exceptions.NotFoundException;
 import com.aminkbi.learnspring.models.Supplier;
 import com.aminkbi.learnspring.repositories.SupplierRepository;
 import org.junit.jupiter.api.BeforeEach;

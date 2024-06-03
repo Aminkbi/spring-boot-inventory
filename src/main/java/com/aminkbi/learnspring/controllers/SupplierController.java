@@ -4,7 +4,6 @@ package com.aminkbi.learnspring.controllers;
 import com.aminkbi.learnspring.dtos.supplier.SupplierDTO;
 import com.aminkbi.learnspring.dtos.supplier.SupplierResponseDTO;
 import com.aminkbi.learnspring.exceptions.NotFoundException;
-import com.aminkbi.learnspring.models.Supplier;
 import com.aminkbi.learnspring.models.response.DeleteResponse;
 import com.aminkbi.learnspring.models.response.ResponseModel;
 import com.aminkbi.learnspring.models.response.UpdateResponse;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/suppliers")
