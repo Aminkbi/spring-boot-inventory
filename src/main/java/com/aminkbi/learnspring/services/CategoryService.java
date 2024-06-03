@@ -30,7 +30,7 @@ public class CategoryService {
     }
 
     public Category getCategoryById(Long id){
-        return categoryRepository.getCategoryById(id);
+        return categoryRepository.findById(id).orElseThrow();
     }
 
     public Category updateCategory(Long id, CategoryDTO categoryDTO) {

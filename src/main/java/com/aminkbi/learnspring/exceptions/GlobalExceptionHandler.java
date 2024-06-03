@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -41,5 +42,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(NotFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(-3, ex.getMessage()));
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<ErrorResponse> handleNoSuchElement(NoSuchElementException ex){
+        return handleNotFound(new NotFoundException(ex.getMessage()));
     }
 }

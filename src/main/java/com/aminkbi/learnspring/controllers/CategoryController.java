@@ -34,6 +34,7 @@ public class CategoryController {
 
         var responseCategory = new CategoryResponseDTO();
         responseCategory.setName(addedCategory.getName());
+        responseCategory.setId(addedCategory.getId());
 
         var responseModel = new ResponseModel<>(1, "Category Created Successfully",responseCategory);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseModel);
@@ -43,11 +44,9 @@ public class CategoryController {
     public ResponseEntity<ResponseModel<CategoryResponseDTO>> getCategory(@PathVariable Long id) throws NotFoundException {
         var category = categoryService.getCategoryById(id);
 
-        if(category == null){
-            throw new NotFoundException("Category not found");
-        }
         var dto = new CategoryResponseDTO();
         dto.setName(category.getName());
+        dto.setId(category.getId());
         var responseModel = new ResponseModel<>(1, "Fetched Category Successfully",dto);
         return ResponseEntity.status(HttpStatus.OK).body(responseModel);
     }
@@ -75,6 +74,7 @@ public class CategoryController {
         var responseCategories = fetchedCategories.get().map(category -> {
             var responseCategory = new CategoryResponseDTO();
             responseCategory.setName(category.getName());
+            responseCategory.setId(category.getId());
             return responseCategory;
         }).toList();
 
