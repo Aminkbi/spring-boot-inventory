@@ -9,6 +9,8 @@ import com.aminkbi.learnspring.models.response.ResponseModel;
 import com.aminkbi.learnspring.models.response.UpdateResponse;
 import com.aminkbi.learnspring.services.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +65,12 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseModel<List<Product>>> listProducts(@RequestParam @NotNull Integer page, @RequestParam @NotNull Integer pageSize) {
-        return ResponseEntity.ok(new ResponseModel<>(1,"Categories fetched successfully",productService.getAllProducts(page, pageSize).get().toList()));
+    public ResponseEntity<ResponseModel<List<Product>>> listProducts(@RequestParam @NotNull @Min(value = 0,message = "minimum value should be 0") Integer page, @RequestParam @NotNull @Min(value=1,message = "minimum value should be 0") @Max(value=20, message = "value should not exceed 20") Integer pageSize
+            , @RequestParam(required = false) String name ) {
+        if(name != null && !name.isBlank()){
+            return ResponseEntity.ok(new ResponseModel<>(1,"Products fetched successfully",productService.findAllByNameContaining(page, pageSize,name)));
+        }
+        return ResponseEntity.ok(new ResponseModel<>(1,"Products fetched successfully",productService.getAllProducts(page, pageSize)));
     }
+
 }

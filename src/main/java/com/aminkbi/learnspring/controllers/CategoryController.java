@@ -6,6 +6,8 @@ import com.aminkbi.learnspring.models.response.DeleteResponse;
 import com.aminkbi.learnspring.models.response.ResponseModel;
 import com.aminkbi.learnspring.services.CategoryService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +54,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseModel<List<CategoryResponseDTO>>> listCategories(@RequestParam @NotNull Integer page, @RequestParam @NotNull Integer pageSize) {
+    public ResponseEntity<ResponseModel<List<CategoryResponseDTO>>> listCategories(@RequestParam @NotNull @Min(value = 0,message = "minimum value should be 0") Integer page,
+                                                                                   @RequestParam @NotNull @Min(value=1,message = "minimum value should be 0") @Max(value=20, message = "value should not exceed 20") Integer pageSize) {
         Pageable pageable = PageRequest.ofSize(pageSize).withPage(page);
         var fetchedCategories = categoryService.getAllCategories(pageable);
         ResponseModel<List<CategoryResponseDTO>> responseModel = new ResponseModel<>(1, "Categories fetched successfully", fetchedCategories);

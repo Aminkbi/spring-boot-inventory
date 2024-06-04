@@ -9,7 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -117,5 +123,28 @@ class SupplierServiceTest {
 
         // Then
         verify(supplierRepository, times(1)).deleteById(supplierId);
+    }
+
+    @Test
+    void testGetAllSuppliers() {
+        Supplier supplier1 = new Supplier();
+        supplier1.setId(1L);
+        supplier1.setName("Supplier 1");
+
+        Supplier supplier2 = new Supplier();
+        supplier2.setId(2L);
+        supplier2.setName("Supplier 2");
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Supplier> page = new PageImpl<>(Arrays.asList(supplier1, supplier2));
+
+        when(supplierRepository.findAll(pageable)).thenReturn(page);
+
+        List<SupplierResponseDTO> result = supplierService.getAllSuppliers(0, 10);
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Supplier 1", result.get(0).getName());
+        assertEquals("Supplier 2", result.get(1).getName());
     }
 }

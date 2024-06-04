@@ -2,16 +2,11 @@ package com.aminkbi.learnspring.dtos.product;
 
 
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class ProductDTO {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @NotNull(message = "Name should be provided")
     private String name;

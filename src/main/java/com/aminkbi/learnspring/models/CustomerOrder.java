@@ -1,13 +1,12 @@
 package com.aminkbi.learnspring.models;
 
 
-import jakarta.annotation.Nullable;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-
-import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 
 //id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -39,5 +38,9 @@ public class CustomerOrder {
 
     @OneToOne(cascade = CascadeType.ALL)
     private AppUser user;
+
+    @OneToMany(mappedBy = "orderItems", fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<OrderItems> orderItems;
 
 }

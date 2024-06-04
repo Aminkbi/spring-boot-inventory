@@ -8,11 +8,12 @@ import com.aminkbi.learnspring.models.Product;
 import com.aminkbi.learnspring.models.Supplier;
 import com.aminkbi.learnspring.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -36,11 +37,11 @@ public class ProductService {
         product.setQuantity(productDTO.getQuantity());
 
         var category = new Category();
-        category.setId(productDTO.getId());
+        category.setId(productDTO.getCategoryId());
         product.setCategory(category);
 
         var supplier = new Supplier();
-        supplier.setId(productDTO.getId());
+        supplier.setId(productDTO.getSupplierId());
         product.setSupplier(supplier);
 
         return productRepository.save(product);
@@ -57,11 +58,11 @@ public class ProductService {
             product.setName(productDTO.getName());
 
             Category category = new Category();
-            category.setId(productDTO.getId());
+            category.setId(productDTO.getCategoryId());
             product.setCategory(category);
 
             Supplier supplier = new Supplier();
-            supplier.setId(productDTO.getId());
+            supplier.setId(productDTO.getSupplierId());
             product.setSupplier(supplier);
 
             product.setDescription(productDTO.getDescription());
@@ -77,7 +78,11 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public Page<Product> getAllProducts(Integer page, Integer pageSize){
-        return productRepository.findAll(Pageable.ofSize(pageSize).withPage(page));
+    public List<Product> getAllProducts(Integer page, Integer pageSize){
+        return productRepository.findAll(Pageable.ofSize(pageSize).withPage(page)).stream().collect(Collectors.toList());
+    }
+
+    public List<Product> findAllByNameContaining(Integer page, Integer pageSize, String name){
+        return productRepository.findAllByNameContaining(Pageable.ofSize(pageSize).withPage(page), name).stream().collect(Collectors.toList());
     }
 }

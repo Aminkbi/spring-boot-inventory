@@ -10,7 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -135,5 +141,61 @@ class ProductServiceTest {
 
         // Then
         verify(productRepository, times(1)).deleteById(productId);
+    }
+
+    @Test
+    void testGetAllProducts() {
+        Product product1 = new Product();
+        product1.setId(1L);
+        product1.setName("Product 1");
+
+        Product product2 = new Product();
+        product2.setId(2L);
+        product2.setName("Product 2");
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Product> page = new PageImpl<>(Arrays.asList(product1, product2));
+
+        when(productRepository.findAll(pageable)).thenReturn(page);
+
+        List<Product> result = productService.getAllProducts(0, 10);
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Product 1", result.get(0).getName());
+        assertEquals("Product 2", result.get(1).getName());
+    }
+
+    @Test
+    void testGetProductByNameContaining() {
+
+        String productName = "Samsung";
+
+        Product samsung = new Product();
+        samsung.setName("Samsung S21Fe");
+        samsung.setDescription("A nice phone");
+        samsung.setPrice(400.0);
+        samsung.setQuantity(20);
+
+        Category category = new Category();
+        category.setId(5L);
+        samsung.setCategory(category);
+
+        Supplier supplier = new Supplier();
+        supplier.setId(1L);
+        samsung.setSupplier(supplier);
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Product> productPage = new PageImpl<>(List.of(samsung));
+        List<Product> expectedProducts = List.of(samsung);
+
+        when(productRepository.findAllByNameContaining(pageable,productName)).thenReturn(productPage);
+
+        // When
+        List<Product> actualProducts = productService.findAllByNameContaining(0,10,productName);
+
+        // Then
+        assertEquals(expectedProducts, actualProducts);
+        verify(productRepository, times(1)).findAllByNameContaining(pageable,productName);
     }
 }

@@ -9,6 +9,8 @@ import com.aminkbi.learnspring.models.response.ResponseModel;
 import com.aminkbi.learnspring.models.response.UpdateResponse;
 import com.aminkbi.learnspring.services.SupplierService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +57,8 @@ public class SupplierController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseModel<List<SupplierResponseDTO>>> listCategories(@RequestParam @NotNull Integer page, @RequestParam @NotNull Integer pageSize) {
+    public ResponseEntity<ResponseModel<List<SupplierResponseDTO>>> listCategories(@RequestParam @NotNull @Min(value = 0,message = "minimum value should be 0") Integer page,
+                                                                                   @RequestParam @NotNull @Min(value=1,message = "minimum value should be 0") @Max(value=20, message = "value should not exceed 20") Integer pageSize) {
         return ResponseEntity.ok(new ResponseModel<>(1,"Categories fetched successfully",supplierService.getAllSuppliers(page, pageSize)));
     }
 }

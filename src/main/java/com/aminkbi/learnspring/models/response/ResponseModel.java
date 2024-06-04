@@ -2,10 +2,9 @@ package com.aminkbi.learnspring.models.response;
 
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-public class ResponseModel<T> implements Response {
+public class ResponseModel<T> {
 
     private Integer resCode;
     private String resMessage;
