@@ -67,6 +67,7 @@ public class CustomerOrderService {
 
     private CustomerOrderResponseDTO mapToDTO(CustomerOrder customerOrder) {
         CustomerOrderResponseDTO customerOrderResponseDTO = new CustomerOrderResponseDTO();
+        customerOrderResponseDTO.setId(customerOrder.getId());
         customerOrderResponseDTO.setOrderDate(customerOrder.getOrderDate());
         customerOrderResponseDTO.setUser(customerOrder.getUser());
         customerOrderResponseDTO.setStatus(customerOrder.getStatus());

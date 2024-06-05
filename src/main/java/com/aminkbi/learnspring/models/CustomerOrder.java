@@ -39,7 +39,7 @@ public class CustomerOrder {
     @OneToOne(cascade = CascadeType.ALL)
     private AppUser user;
 
-    @OneToMany(mappedBy = "orderItems", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customerOrder", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<OrderItems> orderItems;
 

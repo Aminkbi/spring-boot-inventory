@@ -143,11 +143,15 @@ class CustomerOrderServiceTest {
         Long customerOrderId = 1L;
 
         // When
+        when(customerOrderRepository.existsById(customerOrderId)).thenReturn(true);
         customerOrderService.deleteCustomerOrderById(customerOrderId);
 
         // Then
+        verify(customerOrderRepository, times(1)).existsById(customerOrderId);
         verify(customerOrderRepository, times(1)).deleteById(customerOrderId);
     }
+
+
 
     @Test
     void testGetAllCustomerOrders() {
