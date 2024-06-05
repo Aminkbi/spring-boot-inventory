@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 public class CustomerOrderDTO {
 
-
     @NotNull
     private Float total;
 

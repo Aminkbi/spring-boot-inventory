@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,8 +41,7 @@ class CustomerOrderServiceTest {
         CustomerOrder customerOrder = new CustomerOrder();
         customerOrder.setTotal(1000.0F);
         customerOrder.setStatus("Shipped");
-        GregorianCalendar gregorianCalendar = new GregorianCalendar(2002, Calendar.DECEMBER, 25);
-        customerOrder.setOrderDate(gregorianCalendar.getTime());
+        customerOrder.setOrderDate(LocalDateTime.now());
         AppUser user = new AppUser();
         user.setId(1L);
         customerOrder.setUser(user);
@@ -76,7 +76,7 @@ class CustomerOrderServiceTest {
         customerOrder.setId(customerOrderId);
         customerOrder.setTotal(1000.0F);
         customerOrder.setStatus("Shipped");
-        customerOrder.setOrderDate(new Date());
+        customerOrder.setOrderDate(LocalDateTime.now());
         AppUser user = new AppUser();
         user.setId(1L);
         customerOrder.setUser(user);
@@ -90,6 +90,7 @@ class CustomerOrderServiceTest {
         assertEquals(customerOrderId, foundCustomerOrder.getId());
         assertEquals(1000.0F, foundCustomerOrder.getTotal());
         assertEquals("Shipped", foundCustomerOrder.getStatus());
+        assertNotNull(foundCustomerOrder.getOrderDate());
         assertEquals(user, foundCustomerOrder.getUser());
 
         verify(customerOrderRepository, times(1)).findById(customerOrderId);
@@ -108,7 +109,7 @@ class CustomerOrderServiceTest {
         existingCustomerOrder.setId(customerOrderId);
         existingCustomerOrder.setTotal(1000.0F);
         existingCustomerOrder.setStatus("Shipped");
-        existingCustomerOrder.setOrderDate(new Date());
+        existingCustomerOrder.setOrderDate(LocalDateTime.now());
         AppUser oldUser = new AppUser();
         oldUser.setId(1L);
         existingCustomerOrder.setUser(oldUser);
@@ -117,7 +118,7 @@ class CustomerOrderServiceTest {
         updatedCustomerOrder.setId(customerOrderId);
         updatedCustomerOrder.setTotal(2000.0F);
         updatedCustomerOrder.setStatus("Delivered");
-        updatedCustomerOrder.setOrderDate(new Date());
+        updatedCustomerOrder.setOrderDate(LocalDateTime.now());
         AppUser newUser = new AppUser();
         newUser.setId(2L);
         existingCustomerOrder.setUser(newUser);
@@ -160,7 +161,7 @@ class CustomerOrderServiceTest {
         customerOrder1.setId(1L);
         customerOrder1.setTotal(500.0F);
         customerOrder1.setStatus("Shipped");
-        customerOrder1.setOrderDate(new Date());
+        customerOrder1.setOrderDate(LocalDateTime.now());
         AppUser user1 = new AppUser();
         user1.setId(1L);
         customerOrder1.setUser(user1);
@@ -169,7 +170,7 @@ class CustomerOrderServiceTest {
         customerOrder2.setId(2L);
         customerOrder2.setTotal(1000.0F);
         customerOrder2.setStatus("Delivered");
-        customerOrder2.setOrderDate(new Date());
+        customerOrder2.setOrderDate(LocalDateTime.now());
         AppUser user2 = new AppUser();
         user2.setId(2L);
         customerOrder2.setUser(user2);

@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import java.util.Date;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -27,7 +28,7 @@ public class CustomerOrder {
     @Basic(optional = false)
     @Column(insertable = false, updatable = false, nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date orderDate;
+    private LocalDateTime orderDate = LocalDateTime.now();
 
     @Column(nullable = false)
     private Float total;

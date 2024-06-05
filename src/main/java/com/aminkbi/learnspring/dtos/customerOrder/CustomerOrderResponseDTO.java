@@ -5,7 +5,7 @@ import com.aminkbi.learnspring.models.OrderItems;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -23,5 +23,5 @@ public class CustomerOrderResponseDTO {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<OrderItems> orderItems;
 
-    private Date orderDate;
+    private LocalDateTime orderDate;
 }

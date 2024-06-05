@@ -1,6 +1,7 @@
 package com.aminkbi.learnspring.models;
 
 
+import com.aminkbi.learnspring.constants.stockEntries.ChangeTypes;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -33,7 +34,7 @@ public class StockEntries {
     private int changeQuantity;
 
     @Column(nullable = false)
-    private String changeType; // e.g., 'addition' or 'removal'
+    private ChangeTypes changeType; // e.g., 'addition' or 'removal'
 
     @Column(nullable = false)
     private LocalDateTime changeDate = LocalDateTime.now();
