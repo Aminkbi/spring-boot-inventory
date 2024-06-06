@@ -5,6 +5,8 @@ package com.aminkbi.learnspring.dtos.product;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class ProductDTO {
 
@@ -12,6 +14,8 @@ public class ProductDTO {
     private String name;
 
     private String description;
+
+    private Date expiryDate;
 
     @NotNull(message = "Description should be provided")
     private Double price;

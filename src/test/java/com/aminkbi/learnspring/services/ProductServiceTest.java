@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,12 +39,15 @@ class ProductServiceTest {
 
     @Test
     void testAddProduct() {
+
+        var date = new Date();
         // Given
         ProductDTO productDTO = new ProductDTO();
         productDTO.setName("Tesla Model S");
         productDTO.setPrice(25000.0);
         productDTO.setQuantity(10);
         productDTO.setDescription("Quickest electric sedan");
+        productDTO.setExpiryDate(date);
         productDTO.setCategoryId(1L);
         productDTO.setSupplierId(2L);
 
@@ -52,6 +56,7 @@ class ProductServiceTest {
         product.setPrice(25000.0);
         product.setQuantity(10);
         product.setDescription("Quickest electric sedan");
+        product.setExpiryDate(date);
 
         Category category = new Category();
         category.setId(1L);
@@ -74,6 +79,7 @@ class ProductServiceTest {
         assertEquals("Quickest electric sedan", savedProduct.getDescription());
         assertEquals(1L, savedProduct.getCategory().getId());
         assertEquals(2L, savedProduct.getSupplier().getId());
+        assertEquals(date, savedProduct.getExpiryDate());
 
         verify(productRepository, times(1)).save(any(Product.class));
     }

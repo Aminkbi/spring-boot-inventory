@@ -20,9 +20,6 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-
-
-
     @Autowired
     public ProductService(ProductRepository productRepository){
         this.productRepository = productRepository;
@@ -30,21 +27,7 @@ public class ProductService {
     }
 
     public Product addProduct(ProductDTO productDTO){
-        var product = new Product();
-        product.setName(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setPrice(productDTO.getPrice());
-        product.setQuantity(productDTO.getQuantity());
-
-        var category = new Category();
-        category.setId(productDTO.getCategoryId());
-        product.setCategory(category);
-
-        var supplier = new Supplier();
-        supplier.setId(productDTO.getSupplierId());
-        product.setSupplier(supplier);
-
-        return productRepository.save(product);
+        return productRepository.save(mapToProduct(productDTO));
     }
 
     public Optional<Product> getProductById(Long id){
@@ -52,26 +35,10 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, ProductDTO productDTO) {
-        Optional<Product> existingProduct = productRepository.findById(id);
-        if (existingProduct.isPresent()) {
-            Product product = existingProduct.get();
-            product.setName(productDTO.getName());
+        productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Product not found with id: " + id));
 
-            Category category = new Category();
-            category.setId(productDTO.getCategoryId());
-            product.setCategory(category);
-
-            Supplier supplier = new Supplier();
-            supplier.setId(productDTO.getSupplierId());
-            product.setSupplier(supplier);
-
-            product.setDescription(productDTO.getDescription());
-            product.setPrice(productDTO.getPrice());
-            product.setQuantity(productDTO.getQuantity());
-            return productRepository.save(existingProduct.get());
-        } else {
-            throw new NotFoundException("Product not found with id: " + id);
-        }
+        return productRepository.save(mapToProduct(productDTO));
     }
 
     public void deleteProductById(Long id){
@@ -84,5 +51,26 @@ public class ProductService {
 
     public List<Product> findAllByNameContaining(Integer page, Integer pageSize, String name){
         return productRepository.findAllByNameContaining(Pageable.ofSize(pageSize).withPage(page), name).stream().collect(Collectors.toList());
+    }
+
+    private Product mapToProduct(ProductDTO productDTO) {
+
+        Product product = new Product();
+
+        Supplier supplier = new Supplier();
+        supplier.setId(productDTO.getSupplierId());
+
+        Category category = new Category();
+        category.setId(productDTO.getCategoryId());
+
+        product.setSupplier(supplier);
+        product.setCategory(category);
+        product.setName(productDTO.getName());
+        product.setQuantity(product.getQuantity());
+        product.setExpiryDate(productDTO.getExpiryDate());
+        product.setDescription(product.getDescription());
+        product.setPrice(productDTO.getPrice());
+
+        return product;
     }
 }

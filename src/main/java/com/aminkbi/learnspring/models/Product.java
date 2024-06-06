@@ -2,13 +2,11 @@ package com.aminkbi.learnspring.models;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Date;
 
 
 @Entity
@@ -24,6 +22,8 @@ public class Product {
     private String name;
 
     private String description;
+
+    private Date expiryDate;
 
     @Column(nullable = false)
     @NotNull(message = "Description should be provided")
@@ -42,6 +42,5 @@ public class Product {
     @JsonBackReference
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
-
 
 }
